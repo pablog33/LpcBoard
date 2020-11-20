@@ -32,7 +32,7 @@
 #ifndef __BOARD_API_H_
 #define __BOARD_API_H_
 
-#include "lpc_types.h"
+#include <lpc_types.h>
 #include <stdio.h>
 
 #ifdef __cplusplus
@@ -164,6 +164,9 @@ typedef void (*p_msDelay_func_t)(uint32_t);
 /* The DEBUG* functions are selected based on system configuration.
    Code that uses the DEBUG* functions will have their I/O routed to
    the UART, semihosting, or nowhere. */
+
+#define DEBUG_ENABLE 1 /* GPa 201110 0935 */
+
 #if defined(DEBUG_ENABLE)
 #if defined(DEBUG_SEMIHOSTING)
 #define DEBUGINIT()
