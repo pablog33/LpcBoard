@@ -133,6 +133,11 @@ void Board_SetupClocking(void)
     Chip_CREG_SetFlashAcceleration(MAX_CLOCK_FREQ);
     Chip_SetupCoreClock(CLKIN_CRYSTAL, MAX_CLOCK_FREQ, true);
 
+	volatile uint32_t delay;
+    delay = 100000;
+    while(delay--){} /* 201102 2300 Agregado para contemplar inestabilidad inicial cristal CIAA-NXP - PGa */
+
+
     /* Setup system base clocks and initial states. This won't enable and
        disable individual clocks, but sets up the base clock sources for
        each individual peripheral clock. */
