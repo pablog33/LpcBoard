@@ -78,6 +78,7 @@
 
 
 #include "board.h"
+#include "retarget.h"
 #include "string.h"
 #if defined(DEBUG_ENABLE) && !defined(DEBUG_UART)
 #error "Definir DEBUG_UART como LPC_USART{numero de UART}"
