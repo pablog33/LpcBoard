@@ -8,11 +8,10 @@
 extern "C" {
 #endif
 
-#define BOARD_CIAA_EDU_NXP_4337
+//#define BOARD_CIAA_EDU_NXP_4337  /* GPa 201120 2330 */
 
-#ifdef USE_RMII
-    #define BOARD_ENET_PHY_ADDR     0x01
-#endif
+
+#define BOARD_ENET_PHY_ADDR     0x01	/* GPa 201120 2330 */
 
 #define LED_RED                     0
 #define LED_GREEN                   1
