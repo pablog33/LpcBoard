@@ -34,6 +34,7 @@
 */
 
 #include <board.h>
+#include <board_api.h>
 
 /* The System initialization code is called prior to the application and
    initializes the board for run-time operation. Board initialization
@@ -52,14 +53,13 @@ struct CLK_BASE_STATES
 /* Initial base clock states are mostly on */
 STATIC const struct CLK_BASE_STATES InitClkStates[] =
 {
-   /* Ethernet Clock base */   
+   /* Ethernet Clock base */
    {CLK_BASE_PHY_TX, CLKIN_ENET_TX, true, false},
    {CLK_BASE_PHY_RX, CLKIN_ENET_TX, true, false},
 
    /* Clocks derived from dividers */
    {CLK_BASE_USB0, CLKIN_IDIVD, true, true}
 };
-
 
 STATIC const PINMUX_GRP_T pinmuxing[] =
 {
@@ -120,19 +120,23 @@ STATIC const PINMUX_GRP_T pinmuxing[] =
 };
 
 
+
 void Board_SetupMuxing(void)
 {
     Chip_SCU_SetPinMuxing(pinmuxing, sizeof(pinmuxing) / sizeof(PINMUX_GRP_T));
+    printf("inicio");
 }
 
 
 void Board_SetupClocking(void)
 {
+
+	volatile uint32_t delay;
     Chip_CREG_SetFlashAcceleration(MAX_CLOCK_FREQ);
     Chip_SetupCoreClock(CLKIN_CRYSTAL, MAX_CLOCK_FREQ, true);
 
-	volatile uint32_t delay;
     delay = 100000;
+
     while(delay--){} /* 201102 2300 Agregado para contemplar inestabilidad inicial cristal CIAA-NXP - PGa */
 
 

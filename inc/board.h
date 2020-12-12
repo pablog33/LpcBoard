@@ -1,37 +1,19 @@
-#ifndef __BOARD_H__
-#define __BOARD_H__
+#ifndef BOARD_H_
+#define BOARD_H_
 
-#include <chip.h>
-#include <board_api.h>
+#include "chip.h"
+#include "board_api.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//#define BOARD_CIAA_EDU_NXP_4337  /* GPa 201120 2330 */
-
-
-#define BOARD_ENET_PHY_ADDR     0x01	/* GPa 201120 2330 */
-
-#define LED_RED                     0
-#define LED_GREEN                   1
-#define LED_BLUE                    2
-#define LED_1                       3
-#define LED_2                       4
-#define LED_3                       5
-
-#define BOARD_TEC_1                 0
-#define BOARD_TEC_2                 1
-#define BOARD_TEC_3                 2
-#define BOARD_TEC_4                 3
+#define BOARD_CIAA_NXP_4337
 
 #define BOARD_GPIO_0                0
 #define BOARD_GPIO_1                1
 #define BOARD_GPIO_2                2
 #define BOARD_GPIO_3                3
-#define BOARD_GPIO_4                4
-#define BOARD_GPIO_5                5
-#define BOARD_GPIO_6                6
 #define BOARD_GPIO_7                7
 #define BOARD_GPIO_8                8
 
@@ -63,57 +45,70 @@ extern "C" {
 #define DEBUG_UART_CONFIG           (DEBUG_UART_DATA_BITS | DEBUG_UART_PARITY \
                                     | DEBUG_UART_STOP_BITS)
 
+#define US_CYCLES    OscRateIn/1000000    /* 1 uS */
+
+inline void udelay(int32_t us)
+{
+	volatile int i;
+	while (us--) {
+		for (i = 0; i < US_CYCLES; i++) {
+			; /* Burn cycles. */
+		}
+	}
+}
 
 // I2C defaults to Standard/Fast mode, 100 Khz
 #ifndef BOARD_I2C_MODE
-    #define BOARD_I2C_MODE          I2C0_STANDARD_FAST_MODE
+#define BOARD_I2C_MODE          I2C0_STANDARD_FAST_MODE
 #endif
 
 #ifndef BOARD_I2C_SPEED
-    #define BOARD_I2C_SPEED         1000000
+#define BOARD_I2C_SPEED         1000000
 #endif
-
 
 // SPI default config: Master, 8 Bits, SPI format, CPHA0/CPOL0 polarity.
 #ifndef BOARD_SPI_MODE
-    #define BOARD_SPI_MODE          SSP_MODE_MASTER
+#define BOARD_SPI_MODE          SSP_MODE_MASTER
 #endif
 
 #ifndef BOARD_SPI_BITS
-    #define BOARD_SPI_BITS          SSP_BITS_8
+#define BOARD_SPI_BITS          SSP_BITS_8
 #endif
 
 #ifndef BOARD_SPI_FORMAT
-    #define BOARD_SPI_FORMAT        SSP_FRAMEFORMAT_SPI
+#define BOARD_SPI_FORMAT        SSP_FRAMEFORMAT_SPI
 #endif
 
 #ifndef BOARD_SPI_POLARITY
-    #define BOARD_SPI_POLARITY      SSP_CLOCK_CPHA0_CPOL0
+#define BOARD_SPI_POLARITY      SSP_CLOCK_CPHA1_CPOL1
 #endif
 
 #ifndef BOARD_SPI_SPEED
-    #define BOARD_SPI_SPEED         100000
+#define BOARD_SPI_SPEED         100000
 #endif
-
 
 // ADC maximum sampling rate: (4.5 Mhz / 11 bits) = ~400 Khz
 #ifndef BOARD_ADC_SAMPLE_RATE
-    #define BOARD_ADC_SAMPLE_RATE   400000
+#define BOARD_ADC_SAMPLE_RATE   400000
 #endif
 
 #ifndef BOARD_ADC_RESOLUTION
-    #define BOARD_ADC_RESOLUTION    ADC_10BITS
+#define BOARD_ADC_RESOLUTION    ADC_10BITS
 #endif
 
+/* Build for RMII interface */
+#define USE_RMII
+#define BOARD_ENET_PHY_ADDR	0x01 /* GPa 201114 1940 Iss1: NO RESET PHY GPIO0 */
 
-bool Board_TEC_GetStatus(uint8_t button);
-void Board_ADC_ReadBegin(ADC_CHANNEL_T channel);
-bool Board_ADC_ReadWait();
-uint16_t Board_ADC_ReadEnd();
 
+void Board_ENET_GetMacADDR(uint8_t *mcaddr);
+
+void Board_SSP_Init(LPC_SSP_T *pSSP);
+
+void Board_UART_Init(LPC_USART_T *pUART);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BOARD_H_ */
+#endif /* BOARD_H_ */
