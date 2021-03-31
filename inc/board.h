@@ -47,7 +47,7 @@ extern "C" {
 
 #define US_CYCLES    OscRateIn/1000000    /* 1 uS */
 
-inline void udelay(int32_t us)
+static inline void udelay(int32_t us)
 {
 	volatile int i;
 	while (us--) {
